@@ -83,15 +83,15 @@
     return [self yh_colorWithHexString:color alpha:1.0f];
 }
 
-+ (UIColor*)yh_gradientFroYHolor:(UIColor*)c1 toColor:(UIColor*)c2 withHeight:(NSInteger)height{
-    return [UIColor yh_gradientFroYHolors:@[c1,c2] locations:nil gradCenter:CGPointZero gradRadius:height direction:(YHGradDirection_top_down)];
++ (UIColor*)yh_gradientFromcolor:(UIColor*)c1 toColor:(UIColor*)c2 withHeight:(NSInteger)height{
+    return [UIColor yh_gradientFromcolors:@[c1,c2] locations:nil gradCenter:CGPointZero gradRadius:height direction:(YHGradDirection_top_down)];
 }
 
-+ (UIColor *)yh_gradientFroYHolor:(UIColor *)c1 toColor:(UIColor *)c2 withWidth:(NSInteger)width{
-    return [UIColor yh_gradientFroYHolors:@[c1,c2] locations:nil gradCenter:CGPointZero gradRadius:width direction:(YHGradDirection_left_right)];
++ (UIColor *)yh_gradientFromcolor:(UIColor *)c1 toColor:(UIColor *)c2 withWidth:(NSInteger)width{
+    return [UIColor yh_gradientFromcolors:@[c1,c2] locations:nil gradCenter:CGPointZero gradRadius:width direction:(YHGradDirection_left_right)];
 }
 
-+ (UIColor*)yh_gradientFroYHolors:(NSArray <UIColor*>*)colors locations:(NSArray <NSNumber *>* _Nullable)locations gradCenter:(CGPoint)gradCenter gradRadius:(CGFloat)gradRadius direction:(YHGradDirection)direction
++ (UIColor*)yh_gradientFromcolors:(NSArray <UIColor*>*)colors locations:(NSArray <NSNumber *>* _Nullable)locations gradCenter:(CGPoint)gradCenter gradRadius:(CGFloat)gradRadius direction:(YHGradDirection)direction
 {
     CGPoint startPoint = gradCenter;
     CGFloat end_x = gradCenter.x;
@@ -163,21 +163,21 @@
 }
 
 
-+ (UIColor *)yh_transformFroYHolor:(UIColor*)froYHolor toColor:(UIColor *)toColor progress:(CGFloat)progress {
++ (UIColor *)yh_transformFromColor:(UIColor*)FromColor toColor:(UIColor *)toColor progress:(CGFloat)progress {
     
     progress = progress >= 1 ? 1 : progress;
     progress = progress <= 0 ? 0 : progress;
     
-    const CGFloat * fromeComponents = CGColorGetComponents(froYHolor.CGColor);
+    const CGFloat * fromeComponents = CGColorGetComponents(FromColor.CGColor);
     const CGFloat * toComponents = CGColorGetComponents(toColor.CGColor);
     
-    size_t  froYHolorNumber = CGColorGetNumberOfComponents(froYHolor.CGColor);
+    size_t  FromColorNumber = CGColorGetNumberOfComponents(FromColor.CGColor);
     size_t  toColorNumber = CGColorGetNumberOfComponents(toColor.CGColor);
     
-    if (froYHolorNumber == 2) {
+    if (FromColorNumber == 2) {
         CGFloat white = fromeComponents[0];
-        froYHolor = [UIColor colorWithRed:white green:white blue:white alpha:1];
-        fromeComponents = CGColorGetComponents(froYHolor.CGColor);
+        FromColor = [UIColor colorWithRed:white green:white blue:white alpha:1];
+        fromeComponents = CGColorGetComponents(FromColor.CGColor);
     }
     
     if (toColorNumber == 2) {

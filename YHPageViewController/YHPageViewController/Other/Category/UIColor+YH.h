@@ -38,9 +38,9 @@ typedef NS_ENUM(NSInteger, YHGradDirection) {
 + (UIColor *)yh_colorWithHexString:(NSString *)color alpha:(CGFloat)alpha;
 
 /** 渐变 上到下*/
-+ (UIColor*)yh_gradientFroYHolor:(UIColor*)c1 toColor:(UIColor*)c2 withHeight:(NSInteger)height;
++ (UIColor*)yh_gradientFromcolor:(UIColor*)c1 toColor:(UIColor*)c2 withHeight:(NSInteger)height;
 /** 渐变 左到右*/
-+ (UIColor*)yh_gradientFroYHolor:(UIColor*)c1 toColor:(UIColor*)c2 withWidth:(NSInteger)width;
++ (UIColor*)yh_gradientFromcolor:(UIColor*)c1 toColor:(UIColor*)c2 withWidth:(NSInteger)width;
 /**
  渐变
  @param gradCenter 中心点
@@ -48,10 +48,10 @@ typedef NS_ENUM(NSInteger, YHGradDirection) {
  @param direction 方向
  @param locations 数值 0 到 1
  */
-+ (UIColor*)yh_gradientFroYHolors:(NSArray <UIColor*>*)colors locations:(NSArray <NSNumber *>* _Nullable)locations gradCenter:(CGPoint)gradCenter gradRadius:(CGFloat)gradRadius direction:(YHGradDirection)direction;
++ (UIColor*)yh_gradientFromcolors:(NSArray <UIColor*>*)colors locations:(NSArray <NSNumber *>* _Nullable)locations gradCenter:(CGPoint)gradCenter gradRadius:(CGFloat)gradRadius direction:(YHGradDirection)direction;
 
 /** 颜色平滑过渡*/
-+ (UIColor *)yh_transformFroYHolor:(UIColor*)froYHolor toColor:(UIColor *)toColor progress:(CGFloat)progress;
++ (UIColor *)yh_transformFromColor:(UIColor*)FromColor toColor:(UIColor *)toColor progress:(CGFloat)progress;
 
 
 /// 两个颜色是否相同

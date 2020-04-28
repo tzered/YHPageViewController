@@ -40,6 +40,11 @@
 		7A8C9C6624580840003D03A3 /* YHPageViewController8.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C9C6524580840003D03A3 /* YHPageViewController8.m */; };
 		7A8C9C6924580847003D03A3 /* YHPageViewController9.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C9C6824580847003D03A3 /* YHPageViewController9.m */; };
 		7A8C9C6C24582160003D03A3 /* YHPageViewController7.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C9C6B24582160003D03A3 /* YHPageViewController7.m */; };
+		7A8C9C702458231B003D03A3 /* YHPageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C9C6F2458231B003D03A3 /* YHPageScrollView.m */; };
+		7A8C9C7424582368003D03A3 /* UIScrollView+OffsetNotifition.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C9C7324582368003D03A3 /* UIScrollView+OffsetNotifition.m */; };
+		7A8C9C77245824F9003D03A3 /* UIView+YH.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C9C76245824F9003D03A3 /* UIView+YH.m */; };
+		7A8C9C7A24582618003D03A3 /* YHPageHeaderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C9C7924582618003D03A3 /* YHPageHeaderViewController.m */; };
+		7A8C9C7D24582E39003D03A3 /* YHScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C9C7C24582E39003D03A3 /* YHScrollViewController.m */; };
 		81A51DD86F088479BAA96469 /* libPods-YHPageViewController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCC3E5BAD670037BC4447515 /* libPods-YHPageViewController.a */; };
 /* End PBXBuildFile section */
 
@@ -110,6 +115,16 @@
 		7A8C9C6824580847003D03A3 /* YHPageViewController9.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YHPageViewController9.m; sourceTree = "<group>"; };
 		7A8C9C6A24582160003D03A3 /* YHPageViewController7.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YHPageViewController7.h; sourceTree = "<group>"; };
 		7A8C9C6B24582160003D03A3 /* YHPageViewController7.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YHPageViewController7.m; sourceTree = "<group>"; };
+		7A8C9C6E2458231B003D03A3 /* YHPageScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YHPageScrollView.h; sourceTree = "<group>"; };
+		7A8C9C6F2458231B003D03A3 /* YHPageScrollView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YHPageScrollView.m; sourceTree = "<group>"; };
+		7A8C9C7224582368003D03A3 /* UIScrollView+OffsetNotifition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+OffsetNotifition.h"; sourceTree = "<group>"; };
+		7A8C9C7324582368003D03A3 /* UIScrollView+OffsetNotifition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+OffsetNotifition.m"; sourceTree = "<group>"; };
+		7A8C9C75245824F9003D03A3 /* UIView+YH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+YH.h"; sourceTree = "<group>"; };
+		7A8C9C76245824F9003D03A3 /* UIView+YH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+YH.m"; sourceTree = "<group>"; };
+		7A8C9C7824582618003D03A3 /* YHPageHeaderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YHPageHeaderViewController.h; sourceTree = "<group>"; };
+		7A8C9C7924582618003D03A3 /* YHPageHeaderViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YHPageHeaderViewController.m; sourceTree = "<group>"; };
+		7A8C9C7B24582E39003D03A3 /* YHScrollViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YHScrollViewController.h; sourceTree = "<group>"; };
+		7A8C9C7C24582E39003D03A3 /* YHScrollViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YHScrollViewController.m; sourceTree = "<group>"; };
 		CCC3E5BAD670037BC4447515 /* libPods-YHPageViewController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YHPageViewController.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -169,19 +184,12 @@
 			children = (
 				7A8C9C152457D75C003D03A3 /* YHPageViewController.h */,
 				7A8C9C112457D75C003D03A3 /* YHPageViewController.m */,
+				7A8C9C7824582618003D03A3 /* YHPageHeaderViewController.h */,
+				7A8C9C7924582618003D03A3 /* YHPageHeaderViewController.m */,
+				7A8C9C6D245822FA003D03A3 /* View */,
 				7A8C9C162457D75C003D03A3 /* Model */,
-				7A8C9C122457D75C003D03A3 /* Segment */,
 			);
 			path = PageController;
-			sourceTree = "<group>";
-		};
-		7A8C9C122457D75C003D03A3 /* Segment */ = {
-			isa = PBXGroup;
-			children = (
-				7A8C9C142457D75C003D03A3 /* YHSegmentView.h */,
-				7A8C9C132457D75C003D03A3 /* YHSegmentView.m */,
-			);
-			path = Segment;
 			sourceTree = "<group>";
 		};
 		7A8C9C162457D75C003D03A3 /* Model */ = {
@@ -198,6 +206,9 @@
 		7A8C9C1F2457D885003D03A3 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				7A8C9C262457D885003D03A3 /* YHKit.h */,
+				7A8C9C2F2457D885003D03A3 /* YHKit.m */,
+				7A8C9C712458235E003D03A3 /* Category */,
 				7A8C9C402457D8E8003D03A3 /* BadgeView */,
 				7A8C9C232457D885003D03A3 /* Base */,
 			);
@@ -207,26 +218,12 @@
 		7A8C9C232457D885003D03A3 /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				7A8C9C472457EB8B003D03A3 /* NSMutableAttributedString+YH.h */,
-				7A8C9C482457EB8C003D03A3 /* NSMutableAttributedString+YH.m */,
-				7A8C9C322457D885003D03A3 /* UIButton+Block.h */,
-				7A8C9C2A2457D885003D03A3 /* UIButton+Block.m */,
-				7A8C9C312457D885003D03A3 /* UIColor+YH.h */,
-				7A8C9C2B2457D885003D03A3 /* UIColor+YH.m */,
-				7A8C9C352457D885003D03A3 /* UIColor+YHStyle.h */,
-				7A8C9C2C2457D885003D03A3 /* UIColor+YHStyle.m */,
-				7A8C9C342457D885003D03A3 /* UIFont+YH.h */,
-				7A8C9C282457D885003D03A3 /* UIFont+YH.m */,
 				7A8C9C2D2457D885003D03A3 /* YHBaseObject.h */,
 				7A8C9C242457D885003D03A3 /* YHBaseObject.m */,
 				7A8C9C292457D885003D03A3 /* YHBaseView.h */,
 				7A8C9C332457D885003D03A3 /* YHBaseView.m */,
 				7A8C9C2E2457D885003D03A3 /* YHConstant.h */,
 				7A8C9C272457D885003D03A3 /* YHConstant.m */,
-				7A8C9C262457D885003D03A3 /* YHKit.h */,
-				7A8C9C2F2457D885003D03A3 /* YHKit.m */,
-				7A8C9C442457D9F8003D03A3 /* UIView+Frame.h */,
-				7A8C9C452457D9F8003D03A3 /* UIView+Frame.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -273,8 +270,44 @@
 				7A8C9C532457ED54003D03A3 /* YHColorViewController.m */,
 				7A8C9C552457ED6E003D03A3 /* YHTableViewController.h */,
 				7A8C9C562457ED6E003D03A3 /* YHTableViewController.m */,
+				7A8C9C7B24582E39003D03A3 /* YHScrollViewController.h */,
+				7A8C9C7C24582E39003D03A3 /* YHScrollViewController.m */,
 			);
 			path = ContentVC;
+			sourceTree = "<group>";
+		};
+		7A8C9C6D245822FA003D03A3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7A8C9C142457D75C003D03A3 /* YHSegmentView.h */,
+				7A8C9C132457D75C003D03A3 /* YHSegmentView.m */,
+				7A8C9C6E2458231B003D03A3 /* YHPageScrollView.h */,
+				7A8C9C6F2458231B003D03A3 /* YHPageScrollView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		7A8C9C712458235E003D03A3 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				7A8C9C75245824F9003D03A3 /* UIView+YH.h */,
+				7A8C9C76245824F9003D03A3 /* UIView+YH.m */,
+				7A8C9C442457D9F8003D03A3 /* UIView+Frame.h */,
+				7A8C9C452457D9F8003D03A3 /* UIView+Frame.m */,
+				7A8C9C472457EB8B003D03A3 /* NSMutableAttributedString+YH.h */,
+				7A8C9C482457EB8C003D03A3 /* NSMutableAttributedString+YH.m */,
+				7A8C9C322457D885003D03A3 /* UIButton+Block.h */,
+				7A8C9C2A2457D885003D03A3 /* UIButton+Block.m */,
+				7A8C9C312457D885003D03A3 /* UIColor+YH.h */,
+				7A8C9C2B2457D885003D03A3 /* UIColor+YH.m */,
+				7A8C9C352457D885003D03A3 /* UIColor+YHStyle.h */,
+				7A8C9C2C2457D885003D03A3 /* UIColor+YHStyle.m */,
+				7A8C9C342457D885003D03A3 /* UIFont+YH.h */,
+				7A8C9C282457D885003D03A3 /* UIFont+YH.m */,
+				7A8C9C7224582368003D03A3 /* UIScrollView+OffsetNotifition.h */,
+				7A8C9C7324582368003D03A3 /* UIScrollView+OffsetNotifition.m */,
+			);
+			path = Category;
 			sourceTree = "<group>";
 		};
 		9012BBA5CE00198EC575A1EC /* Frameworks */ = {
@@ -397,6 +430,7 @@
 				7A8C9C1E2457D75C003D03A3 /* YHPageTitleItem.m in Sources */,
 				7A8C9C502457EC73003D03A3 /* YHPageViewController2.m in Sources */,
 				7A8C9C542457ED54003D03A3 /* YHColorViewController.m in Sources */,
+				7A8C9C702458231B003D03A3 /* YHPageScrollView.m in Sources */,
 				7A8C9C6924580847003D03A3 /* YHPageViewController9.m in Sources */,
 				7A8C9C4D2457EC67003D03A3 /* YHPageViewController1.m in Sources */,
 				7A8C9C432457D8FC003D03A3 /* UIView+YHBadge.m in Sources */,
@@ -407,16 +441,20 @@
 				7A8C9C372457D885003D03A3 /* YHBaseObject.m in Sources */,
 				7A8C9C3A2457D885003D03A3 /* UIButton+Block.m in Sources */,
 				7A8C9C6324580838003D03A3 /* YHPageViewController6.m in Sources */,
+				7A8C9C7D24582E39003D03A3 /* YHScrollViewController.m in Sources */,
 				7A8C9C1C2457D75C003D03A3 /* YHSegmentView.m in Sources */,
 				7A8C9C462457D9F8003D03A3 /* UIView+Frame.m in Sources */,
 				7A8C9C3C2457D885003D03A3 /* UIColor+YHStyle.m in Sources */,
 				7A8C9C1B2457D75C003D03A3 /* YHPageViewController.m in Sources */,
 				7A8C9C5D2457FF4B003D03A3 /* YHPageViewController4.m in Sources */,
 				7A8C9C6624580840003D03A3 /* YHPageViewController8.m in Sources */,
+				7A8C9C7424582368003D03A3 /* UIScrollView+OffsetNotifition.m in Sources */,
 				7A8C9C3F2457D885003D03A3 /* YHBaseView.m in Sources */,
 				7A8C9C3D2457D885003D03A3 /* YHKit.m in Sources */,
 				7A8C9C3B2457D885003D03A3 /* UIColor+YH.m in Sources */,
+				7A8C9C7A24582618003D03A3 /* YHPageHeaderViewController.m in Sources */,
 				7A8C9C0A2457D6A9003D03A3 /* main.m in Sources */,
+				7A8C9C77245824F9003D03A3 /* UIView+YH.m in Sources */,
 				7A8C9C6024580830003D03A3 /* YHPageViewController5.m in Sources */,
 				7A8C9C572457ED6E003D03A3 /* YHTableViewController.m in Sources */,
 				7A8C9BFC2457D6A6003D03A3 /* SceneDelegate.m in Sources */,

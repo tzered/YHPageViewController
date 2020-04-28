@@ -6,11 +6,11 @@
 //  Copyright © 2020 林宁宁. All rights reserved.
 //
 
-#import "YHPageViewController.h"
+#import "YHPageHeaderViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YHPageViewController8 : YHPageViewController
+@interface YHPageViewController8 : YHPageHeaderViewController
 
 @end
 

@@ -94,7 +94,7 @@
 }
 
 + (UIColor *)yh_downPaymentColor {
-    return [UIColor yh_gradientFroYHolor:[UIColor yh_colorWithHexString:@"1C6FFF"] toColor:[UIColor yh_colorWithHexString:@"4592FF"] withWidth:[UIScreen mainScreen].bounds.size.width];
+    return [UIColor yh_gradientFromcolor:[UIColor yh_colorWithHexString:@"1C6FFF"] toColor:[UIColor yh_colorWithHexString:@"4592FF"] withWidth:[UIScreen mainScreen].bounds.size.width];
 }
 
 + (UIColor *)yh_stagesCustomerColor {
@@ -102,7 +102,7 @@
 }
 
 + (UIColor *)yh_stagesMerchantColor {
-    return [UIColor yh_gradientFroYHolor:[UIColor yh_colorWithHexString:@"4171F9"] toColor:[UIColor yh_colorWithHexString:@"58A4FF"] withWidth:[UIScreen mainScreen].bounds.size.width];
+    return [UIColor yh_gradientFromcolor:[UIColor yh_colorWithHexString:@"4171F9"] toColor:[UIColor yh_colorWithHexString:@"58A4FF"] withWidth:[UIScreen mainScreen].bounds.size.width];
 }
 
 /// 阴影色 黑色 0.12 透明

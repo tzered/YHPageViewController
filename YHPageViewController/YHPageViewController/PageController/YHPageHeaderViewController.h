@@ -1,0 +1,29 @@
+//
+//  YHPageHeaderViewController.h
+//  YHPageViewController
+//
+//  Created by 林宁宁 on 2020/4/28.
+//  Copyright © 2020 林宁宁. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "YHPageViewController.h"
+
+@protocol YHPageHeaderViewControllerDelegate <NSObject>
+
+- (UIView * _Nonnull)yh_pageHeaderView;
+
+@end
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface YHPageHeaderViewController : UIViewController<YHPageHeaderViewControllerDelegate>
+
+@property (retain, nonatomic, readonly) YHPageViewController * pageViewController;
+
+/// 顶部滚动
+@property (copy, nonatomic) void(^headerScrollBlock)(CGFloat offY);
+
+@end
+
+NS_ASSUME_NONNULL_END

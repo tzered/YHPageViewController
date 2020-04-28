@@ -9,6 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+/** 方法交换*/
+void yh_swizzleMethod(Class theClass, SEL originalSelector, SEL swizzledSelector);
+
+
 /** 多尺寸适配比例 以4.7寸为效果*/
 extern CGFloat Adapted(CGFloat value);
 /** 多尺寸适配比例 以4.7寸为效果*/
