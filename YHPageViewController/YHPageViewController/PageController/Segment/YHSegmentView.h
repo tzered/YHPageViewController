@@ -54,6 +54,8 @@ typedef NS_ENUM(NSInteger, YHSegmentLayoutType) {
 
 /// 布局方式
 @property (nonatomic, assign) YHSegmentLayoutType layoutType;
+/// 指示器类型
+@property (nonatomic, assign) YHIndicatorType indicatorType;
 
 @property (nonatomic, assign) CGFloat miniItemWidth;
 @property (nonatomic, assign) CGFloat spaceItem;
@@ -64,12 +66,11 @@ typedef NS_ENUM(NSInteger, YHSegmentLayoutType) {
 @property (nonatomic, assign) CGFloat spaceContentTop;
 @property (nonatomic, assign) CGFloat spaceContentBottom;
 
-@property (nonatomic, assign) YHIndicatorType indicatorType;
-
 /// 为空跟标题同宽 否则为设置的固定值
 @property (nonatomic, assign) CGSize indicatorSize;
 
-@property (nonatomic, assign) CGFloat spaceToBottom;
+/// 线条的指示器调整
+@property (nonatomic, assign) CGFloat indicatorLineBottomOffset;
 
 
 /// indicatorType 布局方式是 YHIndicatorType_Border 下的设置

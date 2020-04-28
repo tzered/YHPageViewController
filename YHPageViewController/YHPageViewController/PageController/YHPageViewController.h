@@ -12,30 +12,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol YHPageViewControllerProtocol <NSObject>
-
-
-@optional
-
-/// 内容区域大小
-- (CGRect)yh_frameForContentView;
-/// 标题区域大小
-- (CGRect)yh_frameForMenuView;
-/// 初始选中位置
-- (NSInteger)yh_defaultSelectedIndex;
-/// 选中某个位置
-//- (void)yh_segmentChangeAtIndex:(NSInteger)index;
-/// 菜单显示在导航条上
-- (BOOL)yh_segmentMenuShowOnNavigationBar;
-/// 未读消息
-- (NSString *)yh_badgeCountIndex:(NSInteger)index;
-
-@end
-
-@interface YHPageViewController : UIViewController<YHPageViewControllerProtocol>
+@interface YHPageViewController : UIViewController
 
 /// 菜单视图
-@property (retain, nonatomic) YHSegmentView * segmentControl;
+@property (retain, nonatomic, readonly) YHSegmentView * segmentControl;
 
 /// 选中位置
 @property (assign, nonatomic) NSInteger selectIndex;
@@ -45,10 +25,23 @@ NS_ASSUME_NONNULL_BEGIN
 /// 关联的滑动返回的手势
 @property (weak, nonatomic) UIViewController * relatePanParentViewController;
 
+
+/// 菜单显示在导航条上
+@property (assign, nonatomic) BOOL segmentMenuShowOnNavigationBar;
+
+/// 标题区域大小
+@property (assign, nonatomic) CGRect frameForMenuView;
+/// 内容区域大小
+@property (assign, nonatomic) CGRect frameForContentView;
+/// 未读消息
+@property (copy, nonatomic) void(^badgeCountIndexBlock)(NSInteger index, UIButton * badgeView);
+
+
 - (void)yh_addChildController:(UIViewController *)controller title:(NSString * _Nullable)title;
 - (void)yh_addChildController:(UIViewController *)controller titleConfig:(void(^_Nonnull)(YHPageTitleItem * item))config;
 
 - (void)yh_reloadController;
+- (void)yh_reloadSegmentMenu;
 - (void)yh_reloadBadgeCount;
 
 - (void)yh_cleanController;

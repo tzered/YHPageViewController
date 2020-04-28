@@ -32,6 +32,7 @@
     [self yh_addChildController:[YHTableViewController new] title:@"标题333"];
     
     self.canPanPopBackWhenAtFirstPage = YES;
+    self.frameForMenuView = CGRectMake(0, 0, CGRectGetHeight(self.view.frame), 60);
     
     [self yh_reloadController];
 }

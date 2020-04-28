@@ -1,27 +1,27 @@
 //
-//  YHPageViewController2.m
+//  YHPageViewController4.m
 //  YHPageViewController
 //
 //  Created by 林宁宁 on 2020/4/28.
 //  Copyright © 2020 林宁宁. All rights reserved.
 //
 
-#import "YHPageViewController2.h"
+#import "YHPageViewController4.h"
 
 #import "YHColorViewController.h"
 #import "YHTableViewController.h"
 
-@interface YHPageViewController2 ()
+#import "UIView+YHBadge.h"
+
+@interface YHPageViewController4 ()
 
 @end
 
-@implementation YHPageViewController2
+@implementation YHPageViewController4
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    self.segmentMenuShowOnNavigationBar = YES;
     
     [self yh_addChildController:[YHColorViewController new] title:@"标题1"];
     [self yh_addChildController:[YHColorViewController new] title:@"标题2"];
@@ -31,9 +31,17 @@
     [self yh_addChildController:[YHTableViewController new] title:@"标题222LLLooonnnnnnngg"];
     [self yh_addChildController:[YHTableViewController new] title:@"标题333"];
     
-    [self yh_reloadController];
+    self.canPanPopBackWhenAtFirstPage = YES;
     
-    self.selectIndex = 4;
+    [self setBadgeCountIndexBlock:^(NSInteger index, UIButton * _Nonnull badgeView) {
+        NSArray * counts = @[@"1",@"23",@"",@"",@"9999",@"23",@"",@""];
+        badgeView.titleLabel.badgeCountV.badgeCount = counts[index];
+    }];
+    
+
+    
+    
+    [self yh_reloadController];
 }
 
 

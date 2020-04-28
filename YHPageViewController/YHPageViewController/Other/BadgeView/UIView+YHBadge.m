@@ -162,7 +162,7 @@
             }
             
             if([badgeCount integerValue] > 99){
-                badgeCount = @"···";
+                badgeCount = @"99+";
             }
         }
         self.badgeHeight = MAX(Adapted(16), self.badgeHeight);

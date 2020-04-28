@@ -8,7 +8,6 @@
 
 #import "YHPageViewController.h"
 #import <UINavigationController+FDFullscreenPopGesture.h>
-#import "UIView+YHBadge.h"
 #import "YHKit.h"
 
 
@@ -18,9 +17,11 @@
 
 @property (retain, nonatomic) UIPageViewController * pageViewController;
 
-@property (retain, nonatomic) NSMutableArray * pageControllerList;
+@property (retain, nonatomic) NSMutableArray <YHPageControllerItem *>* pageControllerList;
 
-@property (retain, nonatomic) NSMutableArray * yh_pageViewcontrollers;
+@property (retain, nonatomic) NSMutableArray <UIViewController *>* yh_pageViewcontrollers;
+
+@property (retain, nonatomic, readwrite) YHSegmentView * segmentControl;
 
 @end
 
@@ -79,8 +80,8 @@
         [self.yh_pageViewcontrollers addObject:item.showViewController];
     }
     
-    self.segmentControl.frame = [self yh_frameForMenuView];
-    if ([self yh_segmentMenuShowOnNavigationBar] && self.navigationController.navigationBar) {
+    self.segmentControl.frame = self.frameForMenuView;
+    if (self.segmentMenuShowOnNavigationBar && self.navigationController.navigationBar) {
         self.navigationItem.titleView = self.segmentControl;
     } else if(!self.segmentControl.superview){
         [self.view addSubview:self.segmentControl];
@@ -90,9 +91,12 @@
     [self yh_reloadPageViewController];
     [self yh_reloadBadgeCount];
     
-    self.selectIndex = [self yh_defaultSelectedIndex];
-    
-//    self.segmentControl.backgroundColor = [UIColor redColor];
+    if(self.selectIndex != 0 &&
+       self.selectIndex < self.pageControllerList.count){
+        self.selectIndex = self.selectIndex;
+    }else{
+        self.selectIndex = 0;
+    }
 }
 
 /// 刷新顶部菜单
@@ -113,11 +117,14 @@
 }
 
 - (void)yh_reloadBadgeCount{
+    if(!self.badgeCountIndexBlock){
+        return;
+    }
     for(NSInteger i = 0; i < self.segmentControl.segmentCount; i++){
-        NSString * badgeCount = [self yh_badgeCountIndex:i];
         
-        UIView * segmentItemView = [self.segmentControl getItemViewAtIndex:i];
-        segmentItemView.badgeCountV.badgeCount = badgeCount;
+        UIButton * segmentItemView = [self.segmentControl getItemViewAtIndex:i];
+        
+        self.badgeCountIndexBlock(i, segmentItemView);
     }
 }
 
@@ -162,7 +169,7 @@
         }
     }
     
-    self.pageViewController.view.frame = [self yh_frameForContentView];
+    self.pageViewController.view.frame = self.frameForContentView;
     
 }
 
@@ -175,28 +182,31 @@
 
 -(void)setSelectIndex:(NSInteger)selectIndex{
     
-    self.segmentControl.selectIndex = selectIndex;
-    
-    if(!self.pageViewController.viewControllers ||
-       !self.pageViewController.viewControllers.firstObject ||
-       ![self.pageViewController.viewControllers.firstObject isEqual:self.yh_pageViewcontrollers[selectIndex]]){
-        
-        [self.pageViewController setViewControllers:@[self.yh_pageViewcontrollers[selectIndex]] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
-            
-        }];
-    }
-
     _selectIndex = selectIndex;
     
-    if(self.canPanPopBackWhenAtFirstPage){
-        if(selectIndex == 0){
-            self.fd_interactivePopDisabled = NO;
-            self.relatePanParentViewController.fd_interactivePopDisabled = NO;
-        }else{
-            self.fd_interactivePopDisabled = YES;
-            self.relatePanParentViewController.fd_interactivePopDisabled = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.segmentControl.selectIndex = selectIndex;
+        
+        if(!self.pageViewController.viewControllers ||
+           !self.pageViewController.viewControllers.firstObject ||
+           ![self.pageViewController.viewControllers.firstObject isEqual:self.yh_pageViewcontrollers[selectIndex]]){
+            
+            [self.pageViewController setViewControllers:@[self.yh_pageViewcontrollers[selectIndex]] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
+                
+            }];
         }
-    }
+
+        if(self.canPanPopBackWhenAtFirstPage){
+            if(selectIndex == 0){
+                self.fd_interactivePopDisabled = NO;
+                self.relatePanParentViewController.fd_interactivePopDisabled = NO;
+            }else{
+                self.fd_interactivePopDisabled = YES;
+                self.relatePanParentViewController.fd_interactivePopDisabled = YES;
+            }
+        }
+    });
+    
 }
 
 - (NSArray <YHPageTitleItem *>*)yh_getPageTitles{
@@ -284,33 +294,32 @@ willTransitionToViewControllers:(NSArray<UIViewController *> *)pendingViewContro
 }
 
 /// 内容区域大小
-- (CGRect)yh_frameForContentView{
-    if([self yh_segmentMenuShowOnNavigationBar]){
-        return CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
-    }else{
-        CGRect segmentFrame = [self yh_frameForMenuView];
-        return CGRectMake(0, CGRectGetMaxY(segmentFrame), CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame)-CGRectGetMaxY(segmentFrame));
+- (CGRect)frameForContentView{
+    if(CGRectIsEmpty(_frameForContentView)){
+        if(self.segmentMenuShowOnNavigationBar){
+            _frameForContentView = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+        }else{
+            CGRect segmentFrame = self.frameForMenuView;
+            _frameForContentView = CGRectMake(0, CGRectGetMaxY(segmentFrame), CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame)-CGRectGetMaxY(segmentFrame));
+        }
     }
+    return _frameForContentView;
 }
 /// 标题区域大小
-- (CGRect)yh_frameForMenuView{
-    double width = 0;
-    if ([self yh_segmentMenuShowOnNavigationBar]) {
-        width = [UIScreen mainScreen].bounds.size.width - 160;
-    } else {
-        width = CGRectGetWidth(self.view.frame);
+- (CGRect)frameForMenuView{
+    if(CGRectIsEmpty(_frameForMenuView)){
+        double width = 0;
+        if (self.segmentMenuShowOnNavigationBar) {
+            width = [UIScreen mainScreen].bounds.size.width - 160;
+        } else {
+            width = CGRectGetWidth(self.view.frame);
+        }
+        _frameForMenuView = CGRectMake(0, 0, width, Adapted(44));
     }
+    return _frameForMenuView;
+}
 
-    return CGRectMake(0, 0, width, Adapted(44));
-}
-/// 初始选中位置
-- (NSInteger)yh_defaultSelectedIndex{
-    return 0;
-}
-/// 菜单显示在导航条上
-- (BOOL)yh_segmentMenuShowOnNavigationBar{
-    return NO;
-}
+
 
 /// 未读消息
 - (NSString *)yh_badgeCountIndex:(NSInteger)index{

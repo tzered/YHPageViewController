@@ -8,8 +8,6 @@
 
 #import "ViewController.h"
 
-#import "YHPageViewController1.h"
-#import "YHPageViewController2.h"
 
 @interface YHCellItem : NSObject
 
@@ -53,12 +51,17 @@
     
     __weak typeof(&*self)weakSelf = self;
     
+    void(^PushBlock)(NSInteger index, NSString * title) = ^(NSInteger index, NSString * title) {
+        NSString * vcname = [NSString stringWithFormat:@"YHPageViewController%zd",index];
+        UIViewController * vc = [NSClassFromString(vcname) new];
+        vc.title = title;
+        [weakSelf.navigationController pushViewController:vc animated:YES];
+    };
+    
     YHCellItem * item = [YHCellItem new];
     item.title = @"导航条下方";
     [item setClickBlock:^(__kindof YHCellItem *passItem) {
-        UIViewController * vc = [YHPageViewController1 new];
-        vc.title = passItem.title;
-        [weakSelf.navigationController pushViewController:vc animated:YES];
+        PushBlock(1,passItem.title);
     }];
     [self.dataList addObject:item];
     
@@ -66,18 +69,49 @@
     item = [YHCellItem new];
     item.title = @"导航条上";
     [item setClickBlock:^(__kindof YHCellItem *passItem) {
-        UIViewController * vc = [YHPageViewController2 new];
-        vc.title = passItem.title;
-        [weakSelf.navigationController pushViewController:vc animated:YES];
+        PushBlock(2,passItem.title);
     }];
     [self.dataList addObject:item];
     
     item = [YHCellItem new];
     item.title = @"滑动到第一页左滑返回";
     [item setClickBlock:^(__kindof YHCellItem *passItem) {
-        UIViewController * vc = [NSClassFromString(@"YHPageViewController3") new];
-        vc.title = passItem.title;
-        [weakSelf.navigationController pushViewController:vc animated:YES];
+        PushBlock(3,passItem.title);
+    }];
+    [self.dataList addObject:item];
+    
+    item = [YHCellItem new];
+    item.title = @"未读消息数";
+    [item setClickBlock:^(__kindof YHCellItem *passItem) {
+        PushBlock(4,passItem.title);
+    }];
+    [self.dataList addObject:item];
+    
+    item = [YHCellItem new];
+    item.title = @"标题栏样式1-布局";
+    [item setClickBlock:^(__kindof YHCellItem *passItem) {
+        PushBlock(5,passItem.title);
+    }];
+    [self.dataList addObject:item];
+    
+    item = [YHCellItem new];
+    item.title = @"标题栏样式2-标题";
+    [item setClickBlock:^(__kindof YHCellItem *passItem) {
+        PushBlock(6,passItem.title);
+    }];
+    [self.dataList addObject:item];
+    
+    item = [YHCellItem new];
+    item.title = @"page嵌套page";
+    [item setClickBlock:^(__kindof YHCellItem *passItem) {
+        PushBlock(7,passItem.title);
+    }];
+    [self.dataList addObject:item];
+    
+    item = [YHCellItem new];
+    item.title = @"vc的scrollview嵌套page";
+    [item setClickBlock:^(__kindof YHCellItem *passItem) {
+        PushBlock(8,passItem.title);
     }];
     [self.dataList addObject:item];
 }
@@ -93,7 +127,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:(UITableViewCellStyleDefault) reuseIdentifier:@"CellIdentifyPage"];
     }
     
-    cell.textLabel.text = self.dataList[indexPath.row].title;
+    cell.textLabel.text = [NSString stringWithFormat:@"%zd: %@",indexPath.row+1,self.dataList[indexPath.row].title];
     
     return cell;
 }

@@ -37,14 +37,18 @@
     self.backgroundColor = [UIColor whiteColor];
     
     self.contentView = [UIScrollView new];
+    self.contentView.backgroundColor = [UIColor clearColor];
     self.contentView.showsHorizontalScrollIndicator = NO;
     [self addSubview:self.contentView];
+    
 }
 
 - (UIView *)indicatorView{
     if(!_indicatorView){
         _indicatorView = [UIView new];
         _indicatorView.userInteractionEnabled = NO;
+    }
+    if(!_indicatorView.superview){
         [self.contentView addSubview:_indicatorView];
     }
     return _indicatorView;
@@ -70,6 +74,15 @@
     for(YHPageTitleItem * titleConfig in segTitles){
         [self addSegmentTitle:titleConfig];
     }
+    
+    if(self.selectIndex != 0 &&
+       self.selectIndex < self.dataList.count){
+        self.selectIndex = self.selectIndex;
+    }else{
+        self.selectIndex = 0;
+    }
+    
+    [self layoutSubviews];
 }
 
 - (UIButton *)getItemViewAtIndex:(NSInteger)index{
@@ -351,23 +364,27 @@
 - (void)updateIndicatorViewAnimation:(BOOL)animation{
     if(self.config.indicatorType == YHIndicatorType_None ||
        self.config.indicatorType == YHIndicatorType_Border){
+        self.indicatorView.hidden = YES;
         return;
     }
     if(self.btnList.count == 0){
+        self.indicatorView.hidden = YES;
         return;
     }
+    
+    self.indicatorView.hidden = NO;
     
     UIButton * selectBtn = [self.btnList objectAtIndex:self.selectIndex];
     if(CGRectIsEmpty(selectBtn.frame)){
         return;
     }
         
-    CGRect indicatorBounds = CGRectMake(0, 0, selectBtn.width, 2);
+    CGRect indicatorBounds = CGRectMake(0, 0, selectBtn.width, selectBtn.height);
     CGPoint indicatorCenter = CGPointMake(CGRectGetMidX(selectBtn.frame), 0);
 
     if(self.config.indicatorType == YHIndicatorType_Line){
         indicatorBounds.size.height = 2;
-        indicatorCenter.y = CGRectGetHeight(selectBtn.frame) - self.config.spaceToBottom;
+        indicatorCenter.y = CGRectGetHeight(self.frame) - self.config.indicatorLineBottomOffset;
     }
     
     if(!CGSizeEqualToSize(self.config.indicatorSize, CGSizeZero)){
@@ -413,9 +430,21 @@
     
     self.indicatorSize = CGSizeMake(Adapted(20), Adapted(4));
     
-    self.spaceToBottom = 5;
+    self.indicatorLineBottomOffset = 5;
     
     self.spaceItemInside = 10;
+    
+    
+    self.borderColorNormal = [UIColor systemGray2Color];
+    self.borderColorSelect = [UIColor systemBlueColor];
+    self.borderWidthNormal = 0.5;
+    self.borderWidthSelect = 1.5;
+    self.spaceItemInside = 20;
+    self.spaceItem = 12;
+    self.spaceContentLeft = 16;
+    self.spaceContentRight = 16;
+    self.spaceContentTop = 0;
+    self.spaceContentBottom = 0;
 }
 
 @end
