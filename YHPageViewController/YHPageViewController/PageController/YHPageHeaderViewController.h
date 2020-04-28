@@ -12,6 +12,7 @@
 @protocol YHPageHeaderViewControllerDelegate <NSObject>
 
 - (UIView * _Nonnull)yh_pageHeaderView;
+- (CGFloat)yh_pageHeaderHeight;
 
 @end
 
@@ -22,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (retain, nonatomic, readonly) YHPageViewController * pageViewController;
 
 /// 顶部滚动
-@property (copy, nonatomic) void(^headerScrollBlock)(CGFloat offY);
+@property (copy, nonatomic) void(^headerScrollBlock)(CGFloat offy);
 
 @end
 

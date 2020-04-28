@@ -22,9 +22,12 @@
 
 -(void)yh_commonInit{
     
-    self.backgroundColor = [UIColor yh_gradientFromcolor:[UIColor orangeColor] toColor:[[UIColor blueColor] colorWithAlphaComponent:0.2] withHeight:200];
+}
+
+-(void)layoutSubviews{
+    [super layoutSubviews];
     
-    
+    self.backgroundColor = [UIColor yh_gradientFromcolor:[UIColor orangeColor] toColor:[[UIColor blueColor] colorWithAlphaComponent:0.2] withHeight:CGRectGetHeight(self.frame)];
 }
 
 @end
@@ -51,16 +54,8 @@
         
     [self.pageViewController yh_reloadController];
     
-    WS(weakSelf);
-    [self setHeaderScrollBlock:^(CGFloat offY) {
-        if(offY >= 0){
-            weakSelf.headV.transform = CGAffineTransformIdentity;
-        }else{
-            CGFloat multi = ABS(offY*2)/CGRectGetHeight(weakSelf.headV.frame);
-            CGAffineTransform transform = CGAffineTransformMakeTranslation(0, offY*0.5);
-            transform = CGAffineTransformScale(transform, 1+multi, 1+multi);
-            weakSelf.headV.transform = transform;
-        }
+    [self setHeaderScrollBlock:^(CGFloat offy) {
+   
     }];
 }
 
@@ -69,13 +64,16 @@
         return _headV;
     }
     YHHeaderView * headV = [YHHeaderView new];
-    headV.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 200);
     _headV = headV;
     return _headV;
 }
 
 -(UIView *)yh_pageHeaderView{
     return self.headV;
+}
+
+-(CGFloat)yh_pageHeaderHeight{
+    return 250;
 }
 
 /*

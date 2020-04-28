@@ -11,14 +11,12 @@
 #import "UIView+YH.h"
 
 
-@interface YHPageScrollView()
-
-@property (assign, nonatomic) BOOL otherScrollViewIsAtTop;
+@interface YHPageScrollView()<UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) UIScrollView * currentTouchView;
 
-@property (assign, nonatomic) CGFloat offsetYOther;
-@property (assign, nonatomic) CGFloat offsetYSelf;
+@property (assign, nonatomic) CGFloat offsetYPreSelf;
+@property (assign, nonatomic) CGFloat offsetYPreOther;
 
 @end
 
@@ -44,13 +42,14 @@
 
 -(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
 
-    self.offsetYOther = 0;
-    self.offsetYSelf = 0;
+    self.offsetYPreSelf = 0;
+    self.offsetYPreOther = 0;
     if(self.currentTouchView){
         [self.currentTouchView removeObserver:self forKeyPath:@"contentOffset"];
     }
     self.currentTouchView = nil;
-
+    
+    
     UIView * hitView = [super hitTest:point withEvent:event];
 
     UIView * superview = hitView;
@@ -66,98 +65,26 @@
                                     forKeyPath:@"contentOffset"
                                        options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
                                        context:nil];
+            
+            
 
-            return hitView;
+            break;
         }
         superview = superview.superview;
     }
+    
+    self.offsetYPreSelf = self.contentOffset.y;
+    self.offsetYPreOther = self.currentTouchView.contentOffset.y;
     
     return hitView;
 }
 
 
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(UIScrollView *)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(UIScrollView *)scrollView change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
     
     CGPoint offset = [change[NSKeyValueChangeNewKey] CGPointValue];
-    [self contentOffsetChange:offset scrollView:object];
-}
-
-- (void)contentOffsetChange:(CGPoint)offset scrollView:(UIScrollView *)scrollView{
-
-    if([scrollView isEqual:self]){
-
-//        NSLog(@"  %f  __ %f  __%f",offset.y,self.contentOffset.y,self.currentTouchView.contentOffset.y);
-
-        if(offset.y >= self.maxOffsetY){
-            offset = CGPointMake(0, self.maxOffsetY);
-            [self setScrollViewContentOffset:offset scrollView:scrollView];
-        }
-        else{
-            if(self.currentTouchView.contentOffset.y > 0){
-                if(self.contentOffset.y != self.maxOffsetY){
-                    [self setScrollViewContentOffset:CGPointZero scrollView:self.currentTouchView];
-
-                    self.currentTouchView.showsVerticalScrollIndicator = NO;
-                    self.showsVerticalScrollIndicator = YES;
-                }
-                else{
-                    self.offsetYSelf = self.maxOffsetY - offset.y;
-
-                    offset = CGPointMake(0, self.maxOffsetY);
-                }
-            }else{
-
-                [self setScrollViewContentOffset:CGPointZero scrollView:self.currentTouchView];
-
-                self.currentTouchView.showsVerticalScrollIndicator = NO;
-                self.showsVerticalScrollIndicator = YES;
-//                offset.y = offset.y + self.offsetYSelf;
-            }
-        }
-
-        if(self.didScrollBlock){
-            self.didScrollBlock(offset.y);
-        }
-    }
-    else{
-//        NSLog(@"   %f __ %f  __%f __",offset.y,scrollView.contentOffset.y,self.offsetYSelf);
-
-        if(self.contentOffset.y < 0){
-            [self setScrollViewContentOffset:CGPointZero scrollView:scrollView];
-            return;
-        }
-
-        if(offset.y > 0){
-            //还未定住 不跟着一起往上滚
-            if(self.contentOffset.y >= self.maxOffsetY){
-
-                if(scrollView.contentOffset.y == 0){
-                    if(self.offsetYOther == 0){
-                        self.offsetYOther = offset.y;
-                    }
-                }
-
-                offset.y = offset.y - self.offsetYOther;
-            }else{
-                if(scrollView.contentOffset.y == 0){
-                    offset = CGPointZero;
-                }
-            }
-
-            self.currentTouchView.showsVerticalScrollIndicator = YES;
-            self.showsVerticalScrollIndicator = NO;
-        }
-        else{
-            [self setScrollViewContentOffset:CGPointZero scrollView:scrollView];
-        }
-    }
-}
-
-- (void)setScrollViewContentOffset:(CGPoint)offset scrollView:(UIScrollView *)scrollView{
-    if(CGPointEqualToPoint(scrollView.contentOffset, offset)){
-        return;
-    }
-    [scrollView 那个:offset];
+    [self contentOffsetChange:offset scrollView:scrollView];
+    
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
@@ -172,6 +99,92 @@
     
 }
 
+- (void)contentOffsetChange:(CGPoint)offset scrollView:(UIScrollView *)scrollView{
+    
+    if([scrollView isEqual:self]){
+        
+//        NSLog(@"1111    %f  _ %f  __%f __",self.offsetYPreSelf,scrollView.contentOffset.y,self.currentTouchView.contentOffset.y);
+
+        if(self.offsetYPreSelf == scrollView.contentOffset.y){
+            return;
+        }
+        
+        BOOL isPanDown = (self.offsetYPreSelf > scrollView.contentOffset.y);
+        self.offsetYPreSelf = scrollView.contentOffset.y;
+        
+        if(isPanDown){
+            //NSLog(@"1111 往下滚动");
+            //其他视图有上移 距离的 等他完全拖拽完之后 再开始下移
+            if(self.currentTouchView.contentOffset.y > 0){
+                [self setScrollViewContentOffset:CGPointMake(0, self.maxOffsetY) scrollView:scrollView];
+                self.currentTouchView.showsVerticalScrollIndicator = YES;
+                self.showsVerticalScrollIndicator = NO;
+                return;
+            }
+        }else{
+            //NSLog(@"1111 往上滚动");
+            //顶部滑动超过这个距离之后 不在往上滚动
+            if(scrollView.contentOffset.y >= self.maxOffsetY){
+                [self setScrollViewContentOffset:CGPointMake(0, self.maxOffsetY) scrollView:scrollView];
+                self.currentTouchView.showsVerticalScrollIndicator = YES;
+                self.showsVerticalScrollIndicator = NO;
+                return;
+            }
+        }
+        
+        if(self.didScrollBlock){
+            self.didScrollBlock(offset.y);
+        }
+        
+        return;
+    }
+    
+    /// 其他的scrollview
+    
+//    NSLog(@"222222     %f  __ %f  __%f __",self.offsetYPreOther,scrollView.contentOffset.y,self.contentOffset.y);
+            
+    if(self.contentOffset.y < 0){
+        [self setScrollViewContentOffset:CGPointZero scrollView:scrollView];
+        self.currentTouchView.showsVerticalScrollIndicator = NO;
+        self.showsVerticalScrollIndicator = YES;
+        self.offsetYPreOther = scrollView.contentOffset.y;
+        return;
+    }
+    
+    if(self.offsetYPreOther == scrollView.contentOffset.y){
+        return;
+    }
+    
+    BOOL isPanDown = (self.offsetYPreOther > scrollView.contentOffset.y);
+    self.offsetYPreOther = scrollView.contentOffset.y;
+
+    if(isPanDown){
+        //NSLog(@"2222 往下滚动");
+        if(self.contentOffset.y < self.maxOffsetY){
+            //顶部正在拉出来
+            [self setScrollViewContentOffset:CGPointZero scrollView:scrollView];
+            self.currentTouchView.showsVerticalScrollIndicator = NO;
+            self.showsVerticalScrollIndicator = YES;
+        }
+    }else{
+        //NSLog(@"2222 往上滚动");
+        if(self.contentOffset.y < self.maxOffsetY){
+            //顶部还未收起来
+            [self setScrollViewContentOffset:CGPointZero scrollView:scrollView];
+            self.currentTouchView.showsVerticalScrollIndicator = NO;
+            self.showsVerticalScrollIndicator = YES;
+        }
+    }
+}
+
+
+
+- (void)setScrollViewContentOffset:(CGPoint)offset scrollView:(UIScrollView *)scrollView{
+    if(CGPointEqualToPoint(scrollView.contentOffset, offset)){
+        return;
+    }
+    [scrollView setContentOffset:offset];
+}
 
 -(void)dealloc{
     [self.currentTouchView removeObserver:self forKeyPath:@"contentOffset"];

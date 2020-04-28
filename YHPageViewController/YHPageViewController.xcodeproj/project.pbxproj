@@ -41,7 +41,6 @@
 		7A8C9C6924580847003D03A3 /* YHPageViewController9.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C9C6824580847003D03A3 /* YHPageViewController9.m */; };
 		7A8C9C6C24582160003D03A3 /* YHPageViewController7.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C9C6B24582160003D03A3 /* YHPageViewController7.m */; };
 		7A8C9C702458231B003D03A3 /* YHPageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C9C6F2458231B003D03A3 /* YHPageScrollView.m */; };
-		7A8C9C7424582368003D03A3 /* UIScrollView+OffsetNotifition.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C9C7324582368003D03A3 /* UIScrollView+OffsetNotifition.m */; };
 		7A8C9C77245824F9003D03A3 /* UIView+YH.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C9C76245824F9003D03A3 /* UIView+YH.m */; };
 		7A8C9C7A24582618003D03A3 /* YHPageHeaderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C9C7924582618003D03A3 /* YHPageHeaderViewController.m */; };
 		7A8C9C7D24582E39003D03A3 /* YHScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C9C7C24582E39003D03A3 /* YHScrollViewController.m */; };
@@ -117,8 +116,6 @@
 		7A8C9C6B24582160003D03A3 /* YHPageViewController7.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YHPageViewController7.m; sourceTree = "<group>"; };
 		7A8C9C6E2458231B003D03A3 /* YHPageScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YHPageScrollView.h; sourceTree = "<group>"; };
 		7A8C9C6F2458231B003D03A3 /* YHPageScrollView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YHPageScrollView.m; sourceTree = "<group>"; };
-		7A8C9C7224582368003D03A3 /* UIScrollView+OffsetNotifition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+OffsetNotifition.h"; sourceTree = "<group>"; };
-		7A8C9C7324582368003D03A3 /* UIScrollView+OffsetNotifition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+OffsetNotifition.m"; sourceTree = "<group>"; };
 		7A8C9C75245824F9003D03A3 /* UIView+YH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+YH.h"; sourceTree = "<group>"; };
 		7A8C9C76245824F9003D03A3 /* UIView+YH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+YH.m"; sourceTree = "<group>"; };
 		7A8C9C7824582618003D03A3 /* YHPageHeaderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YHPageHeaderViewController.h; sourceTree = "<group>"; };
@@ -304,8 +301,6 @@
 				7A8C9C2C2457D885003D03A3 /* UIColor+YHStyle.m */,
 				7A8C9C342457D885003D03A3 /* UIFont+YH.h */,
 				7A8C9C282457D885003D03A3 /* UIFont+YH.m */,
-				7A8C9C7224582368003D03A3 /* UIScrollView+OffsetNotifition.h */,
-				7A8C9C7324582368003D03A3 /* UIScrollView+OffsetNotifition.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -448,7 +443,6 @@
 				7A8C9C1B2457D75C003D03A3 /* YHPageViewController.m in Sources */,
 				7A8C9C5D2457FF4B003D03A3 /* YHPageViewController4.m in Sources */,
 				7A8C9C6624580840003D03A3 /* YHPageViewController8.m in Sources */,
-				7A8C9C7424582368003D03A3 /* UIScrollView+OffsetNotifition.m in Sources */,
 				7A8C9C3F2457D885003D03A3 /* YHBaseView.m in Sources */,
 				7A8C9C3D2457D885003D03A3 /* YHKit.m in Sources */,
 				7A8C9C3B2457D885003D03A3 /* UIColor+YH.m in Sources */,
