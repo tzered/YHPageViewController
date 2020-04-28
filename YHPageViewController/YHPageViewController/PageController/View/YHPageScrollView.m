@@ -11,7 +11,7 @@
 #import "UIView+YH.h"
 
 
-@interface YHPageScrollView()<UIGestureRecognizerDelegate>
+@interface YHPageScrollView()
 
 @property (weak, nonatomic) UIScrollView * currentTouchView;
 
