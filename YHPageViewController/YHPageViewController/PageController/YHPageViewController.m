@@ -23,6 +23,8 @@
 
 @property (retain, nonatomic, readwrite) YHSegmentView * segmentControl;
 
+@property (weak, nonatomic) UIScrollView * scrollView;
+
 @end
 
 @implementation YHPageViewController
@@ -142,27 +144,33 @@
         [self.view addSubview:self.pageViewController.view];
         
         
+        [self.pageViewController.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj isKindOfClass:[UIScrollView class]]) {
+                self.scrollView = (UIScrollView *)obj;
+            }
+        }];
+        if(self.scrollView){
+            [self.scrollView addObserver:self
+                              forKeyPath:@"contentOffset"
+                                 options:NSKeyValueObservingOptionNew
+                                 context:nil];
+        }
+        
         if(self.canPanPopBackWhenAtFirstPage){
             //添加手势
-            __block UIScrollView *scrollView = nil;
-            [self.pageViewController.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ([obj isKindOfClass:[UIScrollView class]]) {
-                    scrollView = (UIScrollView *)obj;
-                }
-            }];
-            if(scrollView){
+            if(self.scrollView){
                 //新添加的手势，起手势锁的作用
                 _fakePan = [UIPanGestureRecognizer new];
                 _fakePan.delegate = self;
-                [scrollView addGestureRecognizer:_fakePan];
+                [self.scrollView addGestureRecognizer:_fakePan];
 
-                [scrollView.panGestureRecognizer requireGestureRecognizerToFail:self.navigationController.fd_fullscreenPopGestureRecognizer];
-                [scrollView.panGestureRecognizer requireGestureRecognizerToFail:_fakePan];
+                [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:self.navigationController.fd_fullscreenPopGestureRecognizer];
+                [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:_fakePan];
 
                 [_fakePan requireGestureRecognizerToFail:self.navigationController.fd_fullscreenPopGestureRecognizer];
                 
                 if(self.relatePanParentViewController){
-                    [scrollView.panGestureRecognizer requireGestureRecognizerToFail:self.relatePanParentViewController.navigationController.fd_fullscreenPopGestureRecognizer];
+                    [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:self.relatePanParentViewController.navigationController.fd_fullscreenPopGestureRecognizer];
                     [_fakePan requireGestureRecognizerToFail:self.relatePanParentViewController.navigationController.fd_fullscreenPopGestureRecognizer];
                 }
             }
@@ -185,7 +193,7 @@
     _selectIndex = selectIndex;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.segmentControl.selectIndex = selectIndex;
+        self.segmentControl.currentSelectIndex = selectIndex;
         
         if(!self.pageViewController.viewControllers ||
            !self.pageViewController.viewControllers.firstObject ||
@@ -346,6 +354,43 @@ willTransitionToViewControllers:(NSArray<UIViewController *> *)pendingViewContro
         return NO;
     }
 }
+
+
+#pragma mark - kvo
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(UIScrollView *)scrollView change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
+    
+    CGPoint offset = [change[NSKeyValueChangeNewKey] CGPointValue];
+    CGFloat width = CGRectGetWidth(scrollView.frame);
+    
+    //翻页进度
+    CGFloat progress = 0;
+    CGFloat distance = width - offset.x;
+    BOOL goLeft = distance > 0;
+    distance = ABS(distance);
+    
+    if(distance == 0){
+        //NSLog(@"滚动完成");
+        return;
+    }
+    
+    if(distance == width){
+        //NSLog(@"滚动完成");
+        progress = 1;
+    }else{
+        progress = distance/width;
+    }
+    
+    //NSLog(@"%f %@  进度:%f",offset.x,goLeft?@"左滑":@"右滑", progress);
+    
+    [self.segmentControl scrollingProgress:progress direction:goLeft];
+}
+
+
+
+-(void)dealloc{
+    [self.scrollView removeObserver:self forKeyPath:@"contentOffset"];
+}
+
 
 /*
 #pragma mark - Navigation

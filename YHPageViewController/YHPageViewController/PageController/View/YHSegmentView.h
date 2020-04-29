@@ -26,10 +26,20 @@ typedef NS_ENUM(NSInteger, YHSegmentLayoutType) {
     YHSegmentLayoutType_Right
 };
 
+/// 动画类型
+typedef NS_ENUM(NSInteger, YHSegmentAnimation) {
+    YHSegmentAnimation_None         = 0,
+    YHSegmentAnimation_LineFadein   = 1 << 0,//YHIndicatorType_Line 指示器渐入
+    YHSegmentAnimation_FontSize     = 1 << 1,//字体大小变化
+    YHSegmentAnimation_TextColor    = 1 << 2,//字体颜色变化
+//    YHSegmentAnimation_WaterDrop    = 1 << 3,//水滴
+};
+
+
 @class YHSegmentConfig;
 @interface YHSegmentView : YHBaseView
 
-@property (assign, nonatomic) NSInteger selectIndex;
+@property (assign, nonatomic) NSInteger currentSelectIndex;
 
 @property (retain, nonatomic) YHSegmentConfig * config;
 
@@ -37,10 +47,12 @@ typedef NS_ENUM(NSInteger, YHSegmentLayoutType) {
 
 @property (copy, nonatomic) void(^selectBlock)(NSInteger passIndex);
 
-
 - (void)resetSegmentTitles:(NSArray <YHPageTitleItem *>*)segTitles;
 
 - (UIButton *)getItemViewAtIndex:(NSInteger)index;
+
+/// 滚动中切换效果
+- (void)scrollingProgress:(CGFloat)progress direction:(BOOL)goLeft;
 
 @end
 
@@ -71,7 +83,7 @@ typedef NS_ENUM(NSInteger, YHSegmentLayoutType) {
 
 /// 线条的指示器调整
 @property (nonatomic, assign) CGFloat indicatorLineBottomOffset;
-
+@property (nonatomic, assign) CGFloat indicatorLineCornerRadius;
 
 /// indicatorType 布局方式是 YHIndicatorType_Border 下的设置
 @property (nonatomic, strong) UIColor * borderColorNormal;
@@ -79,6 +91,9 @@ typedef NS_ENUM(NSInteger, YHSegmentLayoutType) {
 @property (nonatomic, assign) CGFloat borderWidthNormal;
 @property (nonatomic, assign) CGFloat borderWidthSelect;
 @property (nonatomic, assign) CGFloat cornerRadius;
+
+/// 标签切换动画效果
+@property (nonatomic, assign) YHSegmentAnimation progressAnimation;
 
 @end
 

@@ -114,6 +114,13 @@
         PushBlock(8,passItem.title);
     }];
     [self.dataList addObject:item];
+    
+    item = [YHCellItem new];
+    item.title = @"标签切换动画效果";
+    [item setClickBlock:^(__kindof YHCellItem *passItem) {
+        PushBlock(9,passItem.title);
+    }];
+    [self.dataList addObject:item];
 }
 
 

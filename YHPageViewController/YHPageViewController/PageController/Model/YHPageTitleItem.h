@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (assign, nonatomic) YHPageTitleShowType titleShowType;
 
+/// 该选项附加的类型信息
+@property (assign, nonatomic) NSInteger appendType;
 
 @property (copy, nonatomic) NSString * title;
 

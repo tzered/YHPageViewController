@@ -24,6 +24,7 @@
 
 @property (retain, nonatomic) NSMutableArray <UIButton *> * btnList;
 
+
 @end
 
 @implementation YHSegmentView
@@ -51,6 +52,7 @@
     if(!_indicatorView.superview){
         [self.contentView addSubview:_indicatorView];
     }
+    _indicatorView.layer.cornerRadius = self.config.indicatorLineCornerRadius;
     return _indicatorView;
 }
 
@@ -75,11 +77,15 @@
         [self addSegmentTitle:titleConfig];
     }
     
-    if(self.selectIndex != 0 &&
-       self.selectIndex < self.dataList.count){
-        self.selectIndex = self.selectIndex;
+    if(self.currentSelectIndex != 0 &&
+       self.currentSelectIndex < self.dataList.count){
+        self.currentSelectIndex = self.currentSelectIndex;
     }else{
-        self.selectIndex = 0;
+        self.currentSelectIndex = 0;
+    }
+
+    if(self.selectBlock){
+        self.selectBlock(self.currentSelectIndex);
     }
     
     [self layoutSubviews];
@@ -141,17 +147,17 @@
         }
         
         btn.tag = [self.dataList indexOfObject:item];
-        [btn addActionHandler:^(NSInteger tag) {
-            if(weakSelf.selectIndex == tag){
+        [btn addActionHandler:^(UIButton * sender,NSInteger tag) {
+            
+            if(weakSelf.currentSelectIndex == tag){
                 return;
             }
-            weakSelf.selectIndex = tag;
+            weakSelf.currentSelectIndex = tag;
             
             if(weakSelf.selectBlock){
-                weakSelf.selectBlock(weakSelf.selectIndex);
+                weakSelf.selectBlock(weakSelf.currentSelectIndex);
             }
         }];
-//        btn.backgroundColor = [UIColor yh_randoYHolor];
         [self.contentView addSubview:btn];
         [self.btnList addObject:btn];
     }
@@ -164,15 +170,13 @@
     if(CGRectIsEmpty(self.contentView.frame)){
         return;
     }
-
-//    spaceContentLt
     
     CGFloat contentWidth = 0;
     for(NSInteger i = 0; i < self.dataList.count; i++){
         YHPageTitleItem * item = self.dataList[i];
         UIButton * btn = self.btnList[i];
         
-        if(self.selectIndex == i){
+        if(self.currentSelectIndex == i){
             btn.titleLabel.font = self.config.fontSelected;
             [btn setTitleColor:self.config.colorSelected forState:UIControlStateNormal];
         }else{
@@ -237,7 +241,7 @@
     switch (item.titleShowType) {
         case YHPageTitleShowType_Title:{
             UIFont *titleFont = self.config.fontNormal;
-            if(self.selectIndex == index){
+            if(self.currentSelectIndex == index){
                 titleFont = self.config.fontSelected;
             }
             NSDictionary *attrs = @{NSFontAttributeName: titleFont};
@@ -247,7 +251,7 @@
         case YHPageTitleShowType_Image:{
             itemWidth = item.imageNormal.size.width*self.height/item.imageNormal.size.height;
             itemWidth = MIN(itemWidth, item.imageNormal.size.width);
-            if(self.selectIndex == index && item.imageSelect){
+            if(self.currentSelectIndex == index && item.imageSelect){
                 itemWidth = item.imageSelect.size.width*self.height/item.imageSelect.size.height;
                 itemWidth = MIN(itemWidth, item.imageSelect.size.width);
             }
@@ -255,7 +259,7 @@
             break;
         case YHPageTitleShowType_TitleAndImage:{
             UIFont *titleFont = self.config.fontNormal;
-            if(self.selectIndex == index){
+            if(self.currentSelectIndex == index){
                 titleFont = self.config.fontSelected;
             }
             NSDictionary *attrs = @{NSFontAttributeName: titleFont};
@@ -263,7 +267,7 @@
             
             CGFloat itemWidth2 = item.imageNormal.size.width*self.height/item.imageNormal.size.height;
             itemWidth2 = MIN(itemWidth2, item.imageNormal.size.width);
-            if(self.selectIndex == index && item.imageSelect){
+            if(self.currentSelectIndex == index && item.imageSelect){
                 itemWidth2 = item.imageSelect.size.width*self.height/item.imageSelect.size.height;
                 itemWidth2 = MIN(itemWidth2, item.imageSelect.size.width);
             }
@@ -273,7 +277,7 @@
             break;
         case YHPageTitleShowType_Attribute:{
             itemWidth = [item.attStringNormal yh_getSizeConstrainedToSize:CGSizeMake(FLT_MAX, self.height)].width;
-            if(self.selectIndex == index && item.attStringSelect){
+            if(self.currentSelectIndex == index && item.attStringSelect){
                 itemWidth = [item.attStringSelect yh_getSizeConstrainedToSize:CGSizeMake(FLT_MAX, self.height)].width;
             }
         }
@@ -294,8 +298,9 @@
 }
 
 
--(void)setSelectIndex:(NSInteger)selectIndex{
-    _selectIndex = selectIndex;
+-(void)setCurrentSelectIndex:(NSInteger)currentSelectIndex{
+    
+    _currentSelectIndex = currentSelectIndex;
 
     [UIView animateWithDuration:0.3 animations:^{
         [self relayoutContentView];
@@ -303,7 +308,7 @@
     
     UIButton * selectBtn;
     for(UIButton * btn in self.btnList){
-        if(btn.tag == selectIndex){
+        if(btn.tag == currentSelectIndex){
             btn.selected = YES;
             selectBtn = btn;
             if(self.config.indicatorType == YHIndicatorType_Border){
@@ -313,6 +318,7 @@
                 btn.layer.borderColor = self.config.borderColorSelect.CGColor;
             }
         }else{
+            //取消选中状态
             btn.selected = NO;
             if(self.config.indicatorType == YHIndicatorType_Border){
                 btn.layer.cornerRadius = self.config.cornerRadius;
@@ -326,12 +332,12 @@
     [self updateIndicatorViewAnimation:YES];
     
     if(selectBtn){
-        [self managerScrollFromSubView:selectBtn superViewwWidth:self.width];
+        [self scrollToCenterWithSubView:selectBtn superViewwWidth:self.width];
     }
 }
 
-
--(void)managerScrollFromSubView:(UIView *)view  superViewwWidth:(CGFloat)superViewwWidth
+/// 该视图滚动到中心点
+-(void)scrollToCenterWithSubView:(UIView *)view  superViewwWidth:(CGFloat)superViewwWidth
 {
     if(self.contentView.contentSize.width == 0){
         return;
@@ -374,7 +380,7 @@
     
     self.indicatorView.hidden = NO;
     
-    UIButton * selectBtn = [self.btnList objectAtIndex:self.selectIndex];
+    UIButton * selectBtn = [self.btnList objectAtIndex:self.currentSelectIndex];
     if(CGRectIsEmpty(selectBtn.frame)){
         return;
     }
@@ -403,6 +409,102 @@
         self.indicatorView.center = indicatorCenter;
     }
 }
+
+/// 滚动中切换效果
+- (void)scrollingProgress:(CGFloat)progress direction:(BOOL)goLeft{
+    
+    if(self.config.progressAnimation == YHSegmentAnimation_None){
+        return;
+    }
+    
+    UIButton * currentBtn = [self getItemViewAtIndex:self.currentSelectIndex];
+    UIButton * nextBtn = [self getItemViewAtIndex:goLeft?self.currentSelectIndex-1:self.currentSelectIndex+1];
+    if(!nextBtn){
+        NSLog(@"已经在边界了");
+        return;
+    }
+    
+    
+    if(self.config.progressAnimation & YHSegmentAnimation_FontSize){
+        //字体大小渐变
+        UIFont * fontSelected = self.config.fontSelected.copy;
+        UIFont * fontNormal = self.config.fontNormal.copy;
+        
+        CGFloat sizeNormal = fontNormal.pointSize;
+        CGFloat sizeSelect = fontSelected.pointSize;
+        CGFloat sizeAdapt = (sizeSelect - sizeNormal) * progress;
+        fontSelected = [fontSelected fontWithSize:sizeSelect - sizeAdapt];
+        fontNormal = [fontNormal fontWithSize:sizeNormal + sizeAdapt];
+        
+        currentBtn.titleLabel.font = fontSelected;
+        nextBtn.titleLabel.font = fontNormal;
+    }
+    
+    if(self.config.progressAnimation & YHSegmentAnimation_TextColor){
+        //字体颜色渐变
+        UIColor * colorSelected = [UIColor yh_transformFromColor:self.config.colorSelected toColor:self.config.colorNormal progress:progress];
+        UIColor * colorNormal = [UIColor yh_transformFromColor:self.config.colorNormal toColor:self.config.colorSelected progress:progress];
+        
+        [currentBtn setTitleColor:colorSelected forState:UIControlStateNormal];
+        [nextBtn setTitleColor:colorNormal forState:UIControlStateNormal];
+        
+        //边框渐变
+        if(self.config.indicatorType == YHIndicatorType_Border){
+            UIColor * colorSelected = [UIColor yh_transformFromColor:self.config.borderColorSelect toColor:self.config.borderColorNormal progress:progress];
+            UIColor * colorNormal = [UIColor yh_transformFromColor:self.config.borderColorNormal toColor:self.config.borderColorSelect progress:progress];
+            currentBtn.layer.borderColor = colorSelected.CGColor;
+            nextBtn.layer.borderColor = colorNormal.CGColor;
+            
+            CGFloat borderWidthNormal = self.config.borderWidthNormal;
+            CGFloat borderWidthSelect = self.config.borderWidthSelect;
+            CGFloat sizeAdapt = (borderWidthSelect - borderWidthNormal) * progress;
+
+            currentBtn.layer.borderWidth = borderWidthSelect - sizeAdapt;
+            nextBtn.layer.borderWidth = borderWidthNormal + sizeAdapt;
+        }
+    }
+    
+    if(self.config.progressAnimation & YHSegmentAnimation_LineFadein){
+        //指示器渐变
+        if(self.config.indicatorType == YHIndicatorType_Line){
+            
+            CGSize sizeCurrent = currentBtn.frame.size;
+            CGSize sizeNext = nextBtn.frame.size;
+            if(!CGSizeEqualToSize(self.config.indicatorSize, CGSizeZero)){
+                sizeNext = self.config.indicatorSize;
+                sizeCurrent = self.config.indicatorSize;
+            }
+            CGRect currentRect = CGRectMake(currentBtn.frame.origin.x + (CGRectGetWidth(currentBtn.frame) - sizeCurrent.width)*0.5,
+                                            self.indicatorView.frame.origin.y,
+                                            sizeCurrent.width,
+                                            self.indicatorView.frame.size.height);
+            CGRect lastRect = CGRectMake(nextBtn.frame.origin.x + (CGRectGetWidth(nextBtn.frame) - sizeNext.width)*0.5,
+                                         self.indicatorView.frame.origin.y,
+                                         sizeNext.width,
+                                         self.indicatorView.frame.size.height);
+            
+            if(goLeft){
+                CGFloat distance = currentRect.origin.x - lastRect.origin.x;
+                distance = distance * progress;
+                CGRect animationRect = currentRect;
+                animationRect.origin.x = animationRect.origin.x - distance;
+                animationRect.size.width = animationRect.size.width + distance;
+                self.indicatorView.frame = animationRect;
+            }else{
+                CGFloat distance = CGRectGetMaxX(lastRect) - CGRectGetMaxX(currentRect);
+                distance = distance * progress;
+                CGRect animationRect = currentRect;
+                animationRect.size.width = animationRect.size.width + distance;
+                self.indicatorView.frame = animationRect;
+            }
+            
+        }
+    }
+    
+    
+    
+}
+
 
 @end
 
