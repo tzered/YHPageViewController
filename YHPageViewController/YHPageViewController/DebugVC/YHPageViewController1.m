@@ -10,6 +10,7 @@
 
 #import "YHColorViewController.h"
 #import "YHTableViewController.h"
+#import "YHScrollViewController.h"
 
 @interface YHPageViewController1 ()
 
@@ -22,7 +23,7 @@
     // Do any additional setup after loading the view.
     
     [self yh_addChildController:[YHColorViewController new] title:@"标题1"];
-    [self yh_addChildController:[YHColorViewController new] title:@"标题2"];
+    [self yh_addChildController:[YHScrollViewController new] title:@"标题2"];
     [self yh_addChildController:[YHColorViewController new] title:@"标题3"];
     
     [self yh_addChildController:[YHTableViewController new] title:@"标题1111"];

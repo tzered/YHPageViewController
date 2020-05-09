@@ -8,6 +8,7 @@
 
 #import "YHScrollViewController.h"
 #import "YHKit.h"
+#import "MJRefresh.h"
 
 @interface YHScrollViewController ()
 
@@ -38,7 +39,18 @@
         make.width.equalTo(self.scrollView);
     }];
     
+    
+//    WS(weakSelf)
+//    self.scrollView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+//        [weakSelf refreshEvent];
+//    }];
 }
+
+//- (void)refreshEvent{
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self.scrollView.mj_header endRefreshing];
+//    });
+//}
 
 - (UILabel *)createLab{
     

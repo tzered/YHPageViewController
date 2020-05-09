@@ -121,6 +121,13 @@
         PushBlock(9,passItem.title);
     }];
     [self.dataList addObject:item];
+    
+    item = [YHCellItem new];
+    item.title = @"vc的scrollview嵌套page 要下拉刷新";
+    [item setClickBlock:^(__kindof YHCellItem *passItem) {
+        PushBlock(10,passItem.title);
+    }];
+    [self.dataList addObject:item];
 }
 
 

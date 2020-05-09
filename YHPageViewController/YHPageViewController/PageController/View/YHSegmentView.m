@@ -468,36 +468,41 @@
         //指示器渐变
         if(self.config.indicatorType == YHIndicatorType_Line){
             
-            CGSize sizeCurrent = currentBtn.frame.size;
-            CGSize sizeNext = nextBtn.frame.size;
-            if(!CGSizeEqualToSize(self.config.indicatorSize, CGSizeZero)){
-                sizeNext = self.config.indicatorSize;
-                sizeCurrent = self.config.indicatorSize;
-            }
-            CGRect currentRect = CGRectMake(currentBtn.frame.origin.x + (CGRectGetWidth(currentBtn.frame) - sizeCurrent.width)*0.5,
-                                            self.indicatorView.frame.origin.y,
-                                            sizeCurrent.width,
-                                            self.indicatorView.frame.size.height);
-            CGRect lastRect = CGRectMake(nextBtn.frame.origin.x + (CGRectGetWidth(nextBtn.frame) - sizeNext.width)*0.5,
-                                         self.indicatorView.frame.origin.y,
-                                         sizeNext.width,
-                                         self.indicatorView.frame.size.height);
-            
-            if(goLeft){
-                CGFloat distance = currentRect.origin.x - lastRect.origin.x;
-                distance = distance * progress;
-                CGRect animationRect = currentRect;
-                animationRect.origin.x = animationRect.origin.x - distance;
-                animationRect.size.width = animationRect.size.width + distance;
-                self.indicatorView.frame = animationRect;
+            if(progress == 1){
+                
+                [self updateIndicatorViewAnimation:YES];
+                
             }else{
-                CGFloat distance = CGRectGetMaxX(lastRect) - CGRectGetMaxX(currentRect);
-                distance = distance * progress;
-                CGRect animationRect = currentRect;
-                animationRect.size.width = animationRect.size.width + distance;
-                self.indicatorView.frame = animationRect;
+                CGSize sizeCurrent = currentBtn.frame.size;
+                CGSize sizeNext = nextBtn.frame.size;
+                if(!CGSizeEqualToSize(self.config.indicatorSize, CGSizeZero)){
+                    sizeNext = self.config.indicatorSize;
+                    sizeCurrent = self.config.indicatorSize;
+                }
+                CGRect currentRect = CGRectMake(currentBtn.frame.origin.x + (CGRectGetWidth(currentBtn.frame) - sizeCurrent.width)*0.5,
+                                                self.indicatorView.frame.origin.y,
+                                                sizeCurrent.width,
+                                                self.indicatorView.frame.size.height);
+                CGRect lastRect = CGRectMake(nextBtn.frame.origin.x + (CGRectGetWidth(nextBtn.frame) - sizeNext.width)*0.5,
+                                             self.indicatorView.frame.origin.y,
+                                             sizeNext.width,
+                                             self.indicatorView.frame.size.height);
+                
+                if(goLeft){
+                    CGFloat distance = currentRect.origin.x - lastRect.origin.x;
+                    distance = distance * progress;
+                    CGRect animationRect = currentRect;
+                    animationRect.origin.x = animationRect.origin.x - distance;
+                    animationRect.size.width = animationRect.size.width + distance;
+                    self.indicatorView.frame = animationRect;
+                }else{
+                    CGFloat distance = CGRectGetMaxX(lastRect) - CGRectGetMaxX(currentRect);
+                    distance = distance * progress;
+                    CGRect animationRect = currentRect;
+                    animationRect.size.width = animationRect.size.width + distance;
+                    self.indicatorView.frame = animationRect;
+                }
             }
-            
         }
     }
     

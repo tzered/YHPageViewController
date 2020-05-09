@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "YHPageViewController.h"
+#import "YHPageScrollView.h"
 
 @protocol YHPageHeaderViewControllerDelegate <NSObject>
 
@@ -21,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface YHPageHeaderViewController : UIViewController<YHPageHeaderViewControllerDelegate>
 
 @property (retain, nonatomic, readonly) YHPageViewController * pageViewController;
+
+@property (retain, nonatomic, readonly) YHPageScrollView * scrollView;
 
 /// 顶部滚动
 @property (copy, nonatomic) void(^headerScrollBlock)(CGFloat offy);

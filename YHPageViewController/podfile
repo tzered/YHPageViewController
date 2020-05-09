@@ -11,6 +11,7 @@ targetArray.each do |t|
     
     pod 'Masonry'
     pod 'FDFullscreenPopGesture'
+    pod 'MJRefresh'
     
   end
   

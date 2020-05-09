@@ -7,6 +7,8 @@
 //
 
 #import "YHTableViewController.h"
+#import "YHKit.h"
+#import "MJRefresh.h"
 
 @interface YHTableViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -28,8 +30,17 @@
     self.tableView.rowHeight = 50;
     [self.view addSubview:self.tableView];
     
+    WS(weakSelf)
+    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakSelf refreshEvent];
+    }];
 }
 
+- (void)refreshEvent{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.tableView.mj_header endRefreshing];
+    });
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 100;

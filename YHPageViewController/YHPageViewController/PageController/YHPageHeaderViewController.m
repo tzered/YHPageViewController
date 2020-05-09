@@ -7,14 +7,13 @@
 //
 
 #import "YHPageHeaderViewController.h"
-#import "YHPageScrollView.h"
 #import "YHKit.h"
 
 #import <UINavigationController+FDFullscreenPopGesture.h>
 
 @interface YHPageHeaderViewController ()<UIGestureRecognizerDelegate>
 
-@property (retain, nonatomic) YHPageScrollView * scrollView;
+@property (retain, nonatomic, readwrite) YHPageScrollView * scrollView;
 
 @property (weak, nonatomic) UIView * pageHeaderView;
 
